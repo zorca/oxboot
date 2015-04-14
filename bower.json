@@ -1,0 +1,25 @@
+{
+  "name": "oxboot",
+  "version": "0.0.0",
+  "homepage": "https://github.com/zorca/oxboot",
+  "authors": [
+    "Zorca"
+  ],
+  "description": "Universal toolkit for create web apps & templates with Gulp",
+  "keywords": [
+    "oxboot"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "modernizr": "~2.8.3",
+    "jquery": "~1.11.2",
+    "bootstrap": "~3.3.4"
+  }
+}
