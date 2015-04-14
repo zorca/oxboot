@@ -1,0 +1,19 @@
+{
+  "name": "oxboot",
+  "version": "0.0.1",
+  "description": "Universal toolkit for create web apps & templates with Gulp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zorca/oxboot"
+  },
+  "author": "Zorca",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zorca/oxboot/issues"
+  },
+  "homepage": "https://github.com/zorca/oxboot"
+}
