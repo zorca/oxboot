@@ -58,7 +58,7 @@ gulp.task('templates:dev', function() {
         .pipe(gulp.dest(DEV_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME))
 });
 
-// Scss Dev task
+// Less Dev task
 gulp.task('styles:dev', function() {
     return gulp.src(SRC_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME+'/'+STYLES_FOLDER+'/**/[^_]*.less')
         .pipe(stylesglob({
