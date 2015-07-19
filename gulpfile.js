@@ -21,6 +21,8 @@ var SRC_PATH =          './app',
 var del = require('del'),
     gulp = require('gulp'),
     connect = require('gulp-connect-php'),
+    browsersync = require('browser-sync'),
+    reload  = browsersync.reload,
     debug = require('gulp-debug'),
     gulpif = require('gulp-if'),
     jade = require('gulp-jade'),
@@ -33,7 +35,17 @@ var del = require('del'),
 // PHP server task
 gulp.task('server', function() {
     connect.server({
-        base: DEV_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME
+        base: DEV_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME, port:8010, keepalive: true
+    });
+});
+
+// BrowserSync Task
+gulp.task('browser-sync',['server'], function() {
+    browsersync({
+        proxy: '127.0.0.1:8010',
+        port: 8080,
+        open: true,
+        notify: false
     });
 });
 
@@ -88,12 +100,12 @@ gulp.task('images:dev', function() {
 
 // Watch tasks
 gulp.task('watch:dev', function() {
-    gulp.watch(SRC_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME+'/**/*.jade', ['templates:dev']);
-    gulp.watch(SRC_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME+'/'+STYLES_FOLDER+'/**/*.less', ['styles:dev']);
-    gulp.watch(SRC_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME+'/'+SCRIPTS_FOLDER+'/**/*.js', ['scripts:dev']);
+    gulp.watch(SRC_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME+'/**/*.jade', ['templates:dev' , reload]);
+    gulp.watch(SRC_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME+'/'+STYLES_FOLDER+'/**/*.less', ['styles:dev', reload]);
+    gulp.watch(SRC_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME+'/'+SCRIPTS_FOLDER+'/**/*.js', ['scripts:dev', reload]);
 });
 
 // Default task
 gulp.task('default', ['clean:dev'], function() {
-    gulp.start('server','templates:dev','styles:dev', 'scripts:dev', 'images:dev','watch:dev');
+    gulp.start('browser-sync','templates:dev','styles:dev', 'scripts:dev', 'images:dev','watch:dev');
 });
