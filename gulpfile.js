@@ -25,6 +25,7 @@ var del = require('del'),
     gulpif = require('gulp-if'),
     jade = require('gulp-jade'),
     less = require('gulp-less'),
+    plumber = require('gulp-plumber'),
     templatesglob = require('gulp-jade-globbing'),
     stylesglob = require('gulp-css-globbing'),
     rename = require('gulp-rename');
@@ -44,6 +45,7 @@ gulp.task('clean:dev', function (cb) {
 // Jade Dev task
 gulp.task('templates:dev', function() {
     return gulp.src(SRC_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME+'/**/[^_]*.jade')
+        .pipe(plumber())
         .pipe(templatesglob())
         .pipe(jade({
             pretty: true,
