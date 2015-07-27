@@ -139,5 +139,5 @@ gulp.task('watch', function() {
 
 // Default task
 gulp.task('default', ['clean'], function() {
-    gulp.start('server','templates','styles', 'scripts', 'images','watch');
+    gulp.start('server','templates','styles', 'scripts','images','watch');
 });
