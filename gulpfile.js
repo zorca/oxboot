@@ -5,6 +5,7 @@
 var SRC_PATH =          './app',
     DEV_PATH =          './dev',
     PUB_PATH =          './pub',
+    DEST_PATH =         PUB_PATH,
 // Folders
     TEMPLATES_FOLDER =  'templates',
     TEMPLATE_NAME =     'default',
@@ -38,11 +39,9 @@ var del = require('del'),
     stylesglob = require('gulp-css-globbing'),
     rename = require('gulp-rename');
 
-// Destination Path
+// Destination Path if Development Mode On
 if (DEV_MODE) {
     DEST_PATH = DEV_PATH
-} else {
-    DEST_PATH = PUB_PATH
 }
 
 // Server task
@@ -82,6 +81,23 @@ gulp.task('templates', function() {
 });
 
 switch (CSS_PREPROCESSOR) {
+    case 'less':
+        // Less task
+        gulp.task('styles', function() {
+            return gulp.src(SRC_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME+'/'+STYLES_FOLDER+'/**/[^_]*.less')
+                .pipe(stylesglob({
+                    extensions: ['.css','.less'],
+                    scssImportPath: {
+                        leading_underscore: true,
+                        filename_extension: false
+                    }
+                }))
+                .pipe(less({errLogToConsole: true}))
+                .pipe(gulpif(!DEV_MODE, cssmin()))
+                .pipe(gulpif(!DEV_MODE, rename({extname: '.min.css'})))
+                .pipe(gulp.dest(DEST_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME+'/'+STYLES_FOLDER));
+        });
+        break;
     case 'sass':
         // Sass task
         gulp.task('styles', function() {
@@ -99,25 +115,7 @@ switch (CSS_PREPROCESSOR) {
                 .pipe(gulp.dest(DEST_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME+'/'+STYLES_FOLDER));
         });
     break
-    case 'less':
-        // Less task
-        gulp.task('styles', function() {
-            return gulp.src(SRC_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME+'/'+STYLES_FOLDER+'/**/[^_]*.less')
-                .pipe(stylesglob({
-                    extensions: ['.css','.less'],
-                    scssImportPath: {
-                        leading_underscore: true,
-                        filename_extension: false
-                    }
-                }))
-                .pipe(less({errLogToConsole: true}))
-                .pipe(gulpif(!DEV_MODE, cssmin()))
-                .pipe(gulpif(!DEV_MODE, rename({extname: '.min.css'})))
-                .pipe(gulp.dest(DEST_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME+'/'+STYLES_FOLDER));
-        });
-    break
 }
-
 
 // Scripts task
 gulp.task('scripts', function() {
@@ -127,7 +125,7 @@ gulp.task('scripts', function() {
 
 // Images task
 gulp.task('images', function() {
-    return gulp.src([SRC_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME+'/'+IMAGES_FOLDER+'/**/[^_]*.*'])
+    return gulp.src([SRC_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME+'/'+IMAGES_FOLDER+'/**/*'])
         .pipe(gulp.dest(DEST_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME+'/'+IMAGES_FOLDER));
 });
 
