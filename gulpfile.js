@@ -13,15 +13,16 @@ var SRC_PATH =          './app',
     SCRIPTS_FOLDER =    'scripts',
     IMAGES_FOLDER =     'images',
 // Options
-    CSS_PREPROCESSOR =  'sass',
+    CSS_PREPROCESSOR =  'less',
     TEMPLATES_EXT =     '.php',
     DEV_SERVER =        true,
     DEV_MODE =          false;
 
 /*
- * Gulp plugins
+ * Config & Gulp plugins
  */
-var del = require('del'),
+var config = require('./config.json'),
+    del = require('del'),
     gulp = require('gulp'),
     connect = require('gulp-connect-php'),
     browsersync = require('browser-sync'),
