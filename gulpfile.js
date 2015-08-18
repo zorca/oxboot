@@ -5,7 +5,7 @@
 var SRC_PATH =          './app',
     DEV_PATH =          './dev',
     PUB_PATH =          './pub',
-    DEST_PATH =         PUB_PATH,
+    DEST_PATH =         DEV_PATH,
 // Folders
     TEMPLATES_FOLDER =  'templates',
     TEMPLATE_NAME =     'default',
@@ -13,7 +13,7 @@ var SRC_PATH =          './app',
     SCRIPTS_FOLDER =    'scripts',
     IMAGES_FOLDER =     'images',
 // Options
-    CSS_PREPROCESSOR =  'less',
+    CSS_PREPROCESSOR =  'sass',
     TEMPLATES_EXT =     '.php',
     DEV_SERVER =        true,
     DEV_MODE =          false;
