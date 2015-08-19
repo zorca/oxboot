@@ -5,7 +5,7 @@
 var config = require('./config.json');
 
 // Paths
-var DEST_PATH        =  config.path.pub;
+var dest_path        =  config.path.pub;
 
 /*
  * Gulp plugins
@@ -31,7 +31,7 @@ var del = require('del'),
 
 // Destination Path if Development Mode On
 if (config.options.dev_mode) {
-    DEST_PATH = config.path.dev
+    dest_path = config.path.dev
 }
 
 // Server task
@@ -43,13 +43,13 @@ gulp.task('server', function() {
         notify: false
     });
     connect.server({
-        base: DEST_PATH+'/'+config.folder.templates+'/'+config.folder.template_name, port:8010, keepalive: true
+        base: dest_path+'/'+config.folder.templates+'/'+config.folder.template_name, port:8010, keepalive: true
     });
 });
 
 // Clean Destination folder
 gulp.task('clean', function (cb) {
-    del(DEST_PATH+'*', cb);
+    del(dest_path+'*', cb);
 });
 
 // Jade task
@@ -60,15 +60,15 @@ gulp.task('templates', function() {
         .pipe(jade({
             pretty: true,
             locals: {
-                "TEMPLATES_FOLDER": config.folder.templates,
-                "TEMPLATE_NAME": config.folder.template_name,
+                "template_name": config.folder.template_name,
+                "templates_folder": config.folder.templates,
                 "dev_mode": config.options.dev_mode
             }
         }))
         .pipe(rename({
             extname: config.options.templates_ext
         }))
-        .pipe(gulp.dest(DEST_PATH+'/'+config.folder.templates+'/'+config.folder.template_name))
+        .pipe(gulp.dest(dest_path+'/'+config.folder.templates+'/'+config.folder.template_name))
 });
 
 switch (config.options.css_pre) {
@@ -86,7 +86,7 @@ switch (config.options.css_pre) {
                 .pipe(less({errLogToConsole: true}))
                 .pipe(gulpif(!config.options.dev_mode, cssmin()))
                 .pipe(gulpif(!config.options.dev_mode, rename({extname: '.min.css'})))
-                .pipe(gulp.dest(DEST_PATH+'/'+config.folder.templates+'/'+config.folder.template_name+'/'+config.folder.styles));
+                .pipe(gulp.dest(dest_path+'/'+config.folder.templates+'/'+config.folder.template_name+'/'+config.folder.styles));
         });
         break;
     case 'sass':
@@ -104,7 +104,7 @@ switch (config.options.css_pre) {
                 .pipe(csscomb())
                 .pipe(gulpif(!config.options.dev_mode, cssmin()))
                 .pipe(gulpif(!config.options.dev_mode, rename({extname: '.min.css'})))
-                .pipe(gulp.dest(DEST_PATH+'/'+config.folder.templates+'/'+config.folder.template_name+'/'+config.folder.styles));
+                .pipe(gulp.dest(dest_path+'/'+config.folder.templates+'/'+config.folder.template_name+'/'+config.folder.styles));
         });
     break
 }
@@ -112,13 +112,13 @@ switch (config.options.css_pre) {
 // Scripts task
 gulp.task('scripts', function() {
     return gulp.src([config.path.src+'/'+config.folder.templates+'/'+config.folder.template_name+'/'+config.folder.scripts+'/**/[^_]*.js'])
-        .pipe(gulp.dest(DEST_PATH+'/'+config.folder.templates+'/'+config.folder.template_name+'/'+config.folder.scripts));
+        .pipe(gulp.dest(dest_path+'/'+config.folder.templates+'/'+config.folder.template_name+'/'+config.folder.scripts));
 });
 
 // Images task
 gulp.task('images', function() {
     return gulp.src([config.path.src+'/'+config.folder.templates+'/'+config.folder.template_name+'/'+config.folder.images+'/**/*'])
-        .pipe(gulp.dest(DEST_PATH+'/'+config.folder.templates+'/'+config.folder.template_name+'/'+config.folder.images));
+        .pipe(gulp.dest(dest_path+'/'+config.folder.templates+'/'+config.folder.template_name+'/'+config.folder.images));
 });
 
 // Watch tasks
