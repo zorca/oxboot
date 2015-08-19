@@ -1,16 +1,20 @@
 {
-  "development" : {
-    "src" : [
-      "dev/desktop/js/**/*.js",
-      "!dev/desktop/js/vendor/**"
-    ],
-    "dest" : "build/desktop/js"
+  "path": {
+  "src"             : "./app",
+  "dev"             : "./dev",
+  "pub"             : "./pub"
   },
-  "production" : {
-    "src" : [
-      "dev/mobile/js/**/*.js",
-      "!dev/mobile/js/vendor/**"
-    ],
-    "dest" : "build/mobile/js"
+  "folder": {
+    "template_name" : "default",
+    "templates"     : "templates",
+    "styles"        : "styles",
+    "scripts"       : "scripts",
+    "images"        : "images"
+  },
+  "options": {
+    "css_pre"       : "sass",
+    "templates_ext" : ".php",
+    "dev_mode"      : true,
+    "dev_server"    : true
   }
 }

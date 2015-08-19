@@ -1,28 +1,22 @@
 /*
  * Config
  */
+
+var config = require('./config.json');
+
 // Paths
-var SRC_PATH =          './app',
-    DEV_PATH =          './dev',
-    PUB_PATH =          './pub',
-    DEST_PATH =         DEV_PATH,
+var DEST_PATH        =  config.path.pub,
+
 // Folders
-    TEMPLATES_FOLDER =  'templates',
     TEMPLATE_NAME =     'default',
-    STYLES_FOLDER =     'styles',
-    SCRIPTS_FOLDER =    'scripts',
-    IMAGES_FOLDER =     'images',
+
 // Options
-    CSS_PREPROCESSOR =  'sass',
-    TEMPLATES_EXT =     '.php',
-    DEV_SERVER =        true,
-    DEV_MODE =          false;
+    CSS_PREPROCESSOR =  'sass';
 
 /*
- * Config & Gulp plugins
+ * Gulp plugins
  */
-var config = require('./config.json'),
-    del = require('del'),
+var del = require('del'),
     gulp = require('gulp'),
     connect = require('gulp-connect-php'),
     browsersync = require('browser-sync'),
@@ -34,6 +28,7 @@ var config = require('./config.json'),
     jade = require('gulp-jade'),
     less = require('gulp-less'),
     scss = require('gulp-sass'),
+    csscomb = require('gulp-csscomb'),
     cssmin = require('gulp-minify-css'),
     notify = require('gulp-notify'),
     templatesglob = require('gulp-jade-globbing'),
@@ -41,8 +36,8 @@ var config = require('./config.json'),
     rename = require('gulp-rename');
 
 // Destination Path if Development Mode On
-if (DEV_MODE) {
-    DEST_PATH = DEV_PATH
+if (config.options.dev_mode) {
+    DEST_PATH = config.path.dev
 }
 
 // Server task
@@ -54,7 +49,7 @@ gulp.task('server', function() {
         notify: false
     });
     connect.server({
-        base: DEST_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME, port:8010, keepalive: true
+        base: DEST_PATH+'/'+config.folder.templates+'/'+TEMPLATE_NAME, port:8010, keepalive: true
     });
 });
 
@@ -65,27 +60,27 @@ gulp.task('clean', function (cb) {
 
 // Jade task
 gulp.task('templates', function() {
-    return gulp.src(SRC_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME+'/**/[^_]*.jade')
+    return gulp.src(config.path.src+'/'+config.folder.templates+'/'+TEMPLATE_NAME+'/**/[^_]*.jade')
         .pipe(plumber({errorHandler: notify.onError("Error: <%= error.message %>")}))
         .pipe(templatesglob())
         .pipe(jade({
             pretty: true,
             locals: {
-                "TEMPLATES_FOLDER": TEMPLATES_FOLDER,
+                "TEMPLATES_FOLDER": config.folder.templates,
                 "TEMPLATE_NAME": TEMPLATE_NAME
             }
         }))
         .pipe(rename({
-            extname: TEMPLATES_EXT
+            extname: config.options.templates_ext
         }))
-        .pipe(gulp.dest(DEST_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME))
+        .pipe(gulp.dest(DEST_PATH+'/'+config.folder.templates+'/'+TEMPLATE_NAME))
 });
 
 switch (CSS_PREPROCESSOR) {
     case 'less':
         // Less task
         gulp.task('styles', function() {
-            return gulp.src(SRC_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME+'/'+STYLES_FOLDER+'/**/[^_]*.less')
+            return gulp.src(config.path.src+'/'+config.folder.templates+'/'+TEMPLATE_NAME+'/'+STYLES_FOLDER+'/**/[^_]*.less')
                 .pipe(stylesglob({
                     extensions: ['.css','.less'],
                     scssImportPath: {
@@ -94,15 +89,15 @@ switch (CSS_PREPROCESSOR) {
                     }
                 }))
                 .pipe(less({errLogToConsole: true}))
-                .pipe(gulpif(!DEV_MODE, cssmin()))
-                .pipe(gulpif(!DEV_MODE, rename({extname: '.min.css'})))
-                .pipe(gulp.dest(DEST_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME+'/'+STYLES_FOLDER));
+                .pipe(gulpif(!config.options.dev_mode, cssmin()))
+                .pipe(gulpif(!config.options.dev_mode, rename({extname: '.min.css'})))
+                .pipe(gulp.dest(DEST_PATH+'/'+config.folder.templates+'/'+TEMPLATE_NAME+'/'+STYLES_FOLDER));
         });
         break;
     case 'sass':
         // Sass task
         gulp.task('styles', function() {
-            return gulp.src(SRC_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME+'/'+STYLES_FOLDER+'/**/[^_]*.scss')
+            return gulp.src(config.path.src+'/'+config.folder.templates+'/'+TEMPLATE_NAME+'/'+STYLES_FOLDER+'/**/[^_]*.scss')
                 .pipe(stylesglob({
                     extensions: ['.css','.scss'],
                     scssImportPath: {
@@ -111,31 +106,32 @@ switch (CSS_PREPROCESSOR) {
                     }
                 }))
                 .pipe(scss({errLogToConsole: true}))
-                .pipe(gulpif(!DEV_MODE, cssmin()))
-                .pipe(gulpif(!DEV_MODE, rename({extname: '.min.css'})))
-                .pipe(gulp.dest(DEST_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME+'/'+STYLES_FOLDER));
+                .pipe(csscomb())
+                .pipe(gulpif(!config.options.dev_mode, cssmin()))
+                .pipe(gulpif(!config.options.dev_mode, rename({extname: '.min.css'})))
+                .pipe(gulp.dest(DEST_PATH+'/'+config.folder.templates+'/'+TEMPLATE_NAME+'/'+STYLES_FOLDER));
         });
     break
 }
 
 // Scripts task
 gulp.task('scripts', function() {
-    return gulp.src([SRC_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME+'/'+SCRIPTS_FOLDER+'/**/[^_]*.js'])
-        .pipe(gulp.dest(DEST_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME+'/'+SCRIPTS_FOLDER));
+    return gulp.src([config.path.src+'/'+config.folder.templates+'/'+TEMPLATE_NAME+'/'+SCRIPTS_FOLDER+'/**/[^_]*.js'])
+        .pipe(gulp.dest(DEST_PATH+'/'+config.folder.templates+'/'+TEMPLATE_NAME+'/'+SCRIPTS_FOLDER));
 });
 
 // Images task
 gulp.task('images', function() {
-    return gulp.src([SRC_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME+'/'+IMAGES_FOLDER+'/**/*'])
-        .pipe(gulp.dest(DEST_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME+'/'+IMAGES_FOLDER));
+    return gulp.src([config.path.src+'/'+config.folder.templates+'/'+TEMPLATE_NAME+'/'+IMAGES_FOLDER+'/**/*'])
+        .pipe(gulp.dest(DEST_PATH+'/'+config.folder.templates+'/'+TEMPLATE_NAME+'/'+IMAGES_FOLDER));
 });
 
 // Watch tasks
 gulp.task('watch', function() {
-    gulp.watch(SRC_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME+'/**/*.jade', ['templates' , reload]);
-    gulp.watch(SRC_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME+'/'+STYLES_FOLDER+'/**/*.less', ['styles', reload]);
-    gulp.watch(SRC_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME+'/'+STYLES_FOLDER+'/**/*.scss', ['styles', reload]);
-    gulp.watch(SRC_PATH+'/'+TEMPLATES_FOLDER+'/'+TEMPLATE_NAME+'/'+SCRIPTS_FOLDER+'/**/*.js', ['scripts', reload]);
+    gulp.watch(config.path.src+'/'+config.folder.templates+'/'+TEMPLATE_NAME+'/**/*.jade', ['templates' , reload]);
+    gulp.watch(config.path.src+'/'+config.folder.templates+'/'+TEMPLATE_NAME+'/'+STYLES_FOLDER+'/**/*.less', ['styles', reload]);
+    gulp.watch(config.path.src+'/'+config.folder.templates+'/'+TEMPLATE_NAME+'/'+STYLES_FOLDER+'/**/*.scss', ['styles', reload]);
+    gulp.watch(config.path.src+'/'+config.folder.templates+'/'+TEMPLATE_NAME+'/'+SCRIPTS_FOLDER+'/**/*.js', ['scripts', reload]);
 });
 
 // Default task

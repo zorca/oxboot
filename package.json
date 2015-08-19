@@ -23,6 +23,7 @@
     "gulp-autoprefixer": "^2.3.1",
     "gulp-connect-php": "0.0.5",
     "gulp-css-globbing": "^0.1.7",
+    "gulp-csscomb": "^3.0.6",
     "gulp-debug": "^2.0.1",
     "gulp-if": "^1.2.5",
     "gulp-jade": "^1.0.0",
