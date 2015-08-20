@@ -12,6 +12,7 @@ var dest_path        =  config.path.pub;
  */
 var del = require('del'),
     gulp = require('gulp'),
+    runsequence = require('run-sequence'),
     connect = require('gulp-connect-php'),
     browsersync = require('browser-sync'),
     reload  = browsersync.reload,
@@ -129,7 +130,7 @@ gulp.task('watch', function() {
     gulp.watch(config.path.src+'/'+config.folder.templates+'/'+config.folder.template_name+'/'+config.folder.scripts+'/**/*.js', ['scripts', reload]);
 });
 
-// Default task
+// Default taskgulp
 gulp.task('default', ['clean'], function() {
-    gulp.start('server','templates','styles', 'scripts','images','watch');
+    runsequence('templates','styles','scripts','images','watch','server');
 });
