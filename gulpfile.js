@@ -131,12 +131,12 @@ gulp.task('images', function() {
 // Watch tasks
 gulp.task('watch', function() {
     gulp.watch(config.path.src+'/'+config.folder.templates+'/'+config.folder.template_name+'/**/*.jade', ['templates' , reload]);
-    gulp.watch(config.path.src+'/'+config.folder.templates+'/'+config.folder.template_name+'/'+config.folder.styles+'/**/*.less', ['styles', reload]);
-    gulp.watch(config.path.src+'/'+config.folder.templates+'/'+config.folder.template_name+'/'+config.folder.styles+'/**/*.scss', ['styles', reload]);
-    gulp.watch(config.path.src+'/'+config.folder.templates+'/'+config.folder.template_name+'/'+config.folder.scripts+'/**/*.js', ['scripts', reload]);
+    gulp.watch(config.path.src+'/'+config.folder.templates+'/'+config.folder.template_name+'/**/*.less', ['styles', reload]);
+    gulp.watch(config.path.src+'/'+config.folder.templates+'/'+config.folder.template_name+'/**/*.scss', ['styles', reload]);
+    gulp.watch(config.path.src+'/'+config.folder.templates+'/'+config.folder.template_name+'/**/*.js', ['scripts', reload]);
 });
 
 // Default taskgulp
 gulp.task('default', ['clean'], function() {
-    runsequence('templates','styles','scripts','images','watch','server');
+    runsequence('templates','styles','scripts','fonts','images','watch','server');
 });
