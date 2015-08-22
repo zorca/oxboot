@@ -116,6 +116,12 @@ gulp.task('scripts', function() {
         .pipe(gulp.dest(dest_path+'/'+config.folder.templates+'/'+config.folder.template_name+'/'+config.folder.scripts));
 });
 
+// Fonts task
+gulp.task('fonts', function() {
+    return gulp.src([config.path.src+'/'+config.folder.templates+'/'+config.folder.template_name+'/'+config.folder.fonts+'/**/*'])
+        .pipe(gulp.dest(dest_path+'/'+config.folder.templates+'/'+config.folder.template_name+'/'+config.folder.fonts));
+});
+
 // Images task
 gulp.task('images', function() {
     return gulp.src([config.path.src+'/'+config.folder.templates+'/'+config.folder.template_name+'/'+config.folder.images+'/**/*'])

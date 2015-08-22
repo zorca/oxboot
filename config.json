@@ -9,6 +9,7 @@
     "templates"     : "templates",
     "styles"        : "styles",
     "scripts"       : "scripts",
+    "fonts"         : "fonts",
     "images"        : "images"
   },
   "options": {
