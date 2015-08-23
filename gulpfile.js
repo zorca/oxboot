@@ -136,7 +136,7 @@ gulp.task('watch', function() {
     gulp.watch(config.path.src+'/'+config.folder.templates+'/'+config.folder.template_name+'/**/*.js', ['scripts', reload]);
 });
 
-// Default taskgulp
+// Default gulp task
 gulp.task('default', ['clean'], function() {
     runsequence('templates','styles','scripts','fonts','images','watch','server');
 });
