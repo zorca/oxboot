@@ -89,7 +89,7 @@ switch (config.options.css_pre) {
                 .pipe(gulpif(!config.options.dev_mode, rename({extname: '.min.css'})))
                 .pipe(gulp.dest(dest_path+'/'+config.folder.templates+'/'+config.folder.template_name+'/'+config.folder.styles));
         });
-        break;
+    break;
     case 'sass':
         // Sass task
         gulp.task('styles', function() {
