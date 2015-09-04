@@ -27,7 +27,7 @@
     "gulp-debug": "^2.0.1",
     "gulp-if": "^1.2.5",
     "gulp-jade": "^1.0.0",
-    "gulp-jade-globbing": "^0.1.6",
+    "gulp-jade-globbing": "0.1.7",
     "gulp-less": "^3.0.2",
     "gulp-minify-css": "^1.2.0",
     "gulp-notify": "^2.2.0",
