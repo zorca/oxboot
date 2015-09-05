@@ -5,7 +5,7 @@
   "pub"             : "./pub"
   },
   "folder": {
-    "template_name" : "default",
+    "template_name" : "vera-landing",
     "templates"     : "templates",
     "styles"        : "styles",
     "scripts"       : "scripts",
@@ -13,7 +13,7 @@
     "images"        : "images"
   },
   "options": {
-    "css_pre"       : "sass",
+    "css_pre"       : "scss",
     "templates_ext" : ".php",
     "dev_mode"      : true,
     "dev_server"    : true

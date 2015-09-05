@@ -53,7 +53,7 @@ gulp.task('clean', function (cb) {
     del(dest_path+'*', cb);
 });
 
-// Jade task
+// Templates task
 gulp.task('templates', function() {
     return gulp.src(config.path.src+'/'+config.folder.templates+'/'+config.folder.template_name+'/**/[^_]*.jade')
         .pipe(plumber({errorHandler: notify.onError("Error: <%= error.message %>")}))
@@ -72,43 +72,22 @@ gulp.task('templates', function() {
         .pipe(gulp.dest(dest_path+'/'+config.folder.templates+'/'+config.folder.template_name))
 });
 
-switch (config.options.css_pre) {
-    case 'less':
-        // Less task
-        gulp.task('styles', function() {
-            return gulp.src(config.path.src+'/'+config.folder.templates+'/'+config.folder.template_name+'/'+config.folder.styles+'/**/[^_]*.less')
-                .pipe(stylesglob({
-                    extensions: ['.css','.less'],
-                    scssImportPath: {
-                        leading_underscore: true,
-                        filename_extension: false
-                    }
-                }))
-                .pipe(less({errLogToConsole: true}))
-                .pipe(gulpif(!config.options.dev_mode, cssmin()))
-                .pipe(gulpif(!config.options.dev_mode, rename({extname: '.min.css'})))
-                .pipe(gulp.dest(dest_path+'/'+config.folder.templates+'/'+config.folder.template_name+'/'+config.folder.styles));
-        });
-    break;
-    case 'sass':
-        // Sass task
-        gulp.task('styles', function() {
-            return gulp.src(config.path.src+'/'+config.folder.templates+'/'+config.folder.template_name+'/'+config.folder.styles+'/**/[^_]*.scss')
-                .pipe(stylesglob({
-                    extensions: ['.css','.scss'],
-                    scssImportPath: {
-                        leading_underscore: true,
-                        filename_extension: false
-                    }
-                }))
-                .pipe(scss({errLogToConsole: true}))
-                .pipe(csscomb())
-                .pipe(gulpif(!config.options.dev_mode, cssmin()))
-                .pipe(gulpif(!config.options.dev_mode, rename({extname: '.min.css'})))
-                .pipe(gulp.dest(dest_path+'/'+config.folder.templates+'/'+config.folder.template_name+'/'+config.folder.styles));
-        });
-    break
-}
+// Styles task
+gulp.task('styles', function() {
+    return gulp.src(config.path.src+'/'+config.folder.templates+'/'+config.folder.template_name+'/'+config.folder.styles+'/**/[^_]*.'+config.options.css_pre)
+        .pipe(stylesglob({
+            extensions: ['.css',config.options.css_pre],
+            scssImportPath: {
+                leading_underscore: true,
+                filename_extension: false
+            }
+        }))
+        .pipe(gulpif((config.options.css_pre==='scss'), scss({errLogToConsole: true})))
+        .pipe(gulpif((config.options.css_pre==='less'), less({errLogToConsole: true})))
+        .pipe(gulpif(!config.options.dev_mode, cssmin()))
+        .pipe(gulpif(!config.options.dev_mode, rename({extname: '.min.css'})))
+        .pipe(gulp.dest(dest_path+'/'+config.folder.templates+'/'+config.folder.template_name+'/'+config.folder.styles));
+});
 
 // Scripts task
 gulp.task('scripts', function() {
