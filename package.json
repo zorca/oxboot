@@ -23,7 +23,7 @@
     "gulp-connect-php": "0.0.5",
     "gulp-css-globbing": "^0.1.7",
     "gulp-debug": "^2.0.1",
-    "gulp-if": "^1.2.5",
+    "gulp-if": "^3.0.0",
     "gulp-jade": "^1.0.0",
     "gulp-jade-globbing": "^0.1.6",
     "gulp-less": "^3.0.2",
