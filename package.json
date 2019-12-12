@@ -20,7 +20,7 @@
     "browser-sync": "^2.7.13",
     "del": "^5.1.0",
     "gulp": "^3.8.11",
-    "gulp-connect-php": "0.0.5",
+    "gulp-connect-php": "1.0.3",
     "gulp-css-globbing": "^0.1.7",
     "gulp-debug": "^2.0.1",
     "gulp-if": "^3.0.0",
